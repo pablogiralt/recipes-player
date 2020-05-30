@@ -21,7 +21,7 @@
 
     <v-app-bar app color="green darken-1">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>Application</v-toolbar-title>
+      <v-toolbar-title>Foodie Player</v-toolbar-title>
     </v-app-bar>
 
     <v-content>
@@ -53,6 +53,11 @@ export default {
         icon: 'mdi-rice',
         title: 'Arroz con Chipirones',
         to: '/rice'
+      },
+      {
+        icon: 'mdi-food-steak',
+        title: 'Steak Tartar',
+        to: '/steak-tartar'
       }
     ]
   })

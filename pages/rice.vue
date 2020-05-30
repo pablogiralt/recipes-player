@@ -2,7 +2,7 @@
   <v-layout>
     <v-flex class="text-center">
       <v-subheader>{{ title }}</v-subheader>
-      <Player :steps="steps" />
+      <Player :steps="steps" :video-id="videoId" />
     </v-flex>
   </v-layout>
 </template>
@@ -16,6 +16,7 @@ export default {
   },
   data: () => ({
     title: 'Arroz con Chipirones',
+    videoId: '424289228',
     steps: [
       {
         title: 'Los Ingredientes',
