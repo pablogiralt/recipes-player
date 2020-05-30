@@ -30,6 +30,7 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '~plugins/vimeo-player', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -84,6 +85,9 @@ export default {
     ** You can extend webpack config here
     */
     extend (config, ctx) {
-    }
+    },
+    vendor: [
+      'vue-vimeo-player'
+    ]
   }
 }
