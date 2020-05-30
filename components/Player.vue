@@ -4,6 +4,14 @@
     <v-container fluid>
       <v-row>
         <v-col cols="12" md="6">
+          <div style="display:flex; justify-content: center;">
+            <v-switch
+              v-model="stepMode"
+              color="green darken-1"
+              label="Parar después de cada paso"
+            />
+          </div>
+
           <div class="player__wrapper">
             <no-ssr>
               <vimeo-player
@@ -19,10 +27,13 @@
                 <v-btn
                   text
                   x-large
-                  color="error"
+                  color="green darken-1"
                   @click="play()"
                 >
-                  <v-icon center x-large>
+                  <span class="player__overlay-txt">
+                    Seguir
+                  </span>
+                  <v-icon right x-large>
                     mdi-play
                   </v-icon>
                 </v-btn>
@@ -30,10 +41,13 @@
                 <v-btn
                   text
                   x-large
-                  color="error"
+                  color="green darken-1"
                   @click="goToStep(-1, 'relative')"
                 >
-                  <v-icon center x-large>
+                  <span class="player__overlay-txt">
+                    Repetir
+                  </span>
+                  <v-icon right x-large>
                     mdi-replay
                   </v-icon>
                 </v-btn>
@@ -44,7 +58,7 @@
           <v-btn
             v-if="currentStep > 0"
             depressed
-            color="error"
+            color="green darken-1"
             @click="goToStep(-1, 'relative')"
           >
             <v-icon left>
@@ -54,7 +68,7 @@
           </v-btn>
           <v-btn
             depressed
-            color="error"
+            color="green darken-1"
             @click="play()"
           >
             <v-icon center>
@@ -63,7 +77,7 @@
           </v-btn>
           <v-btn
             depressed
-            color="error"
+            color="green darken-1"
             @click="pause()"
           >
             <v-icon center>
@@ -73,7 +87,7 @@
 
           <v-btn
             depressed
-            color="error"
+            color="green darken-1"
             @click="goToStep(0, 'relative')"
           >
             <v-icon center>
@@ -84,7 +98,7 @@
           <v-btn
             v-if="currentStep <= steps.length"
             depressed
-            color="error"
+            color="green darken-1"
             @click="goToStep(1, 'relative')"
           >
             Siguiente
@@ -97,12 +111,14 @@
         <v-col cols="12" md="6">
           <v-list>
             <v-list-item
-              v-for="(step, i) in steps"
-              :key="i"
-              @click="goToStep(i, 'absolute')"
+              v-for="(step, stepIndex) in steps"
+              :key="stepIndex"
+              class="player__step"
+              :class="{ 'player__step--active': stepIndex == currentStep }"
+              @click="goToStep(stepIndex, 'absolute')"
             >
               <v-list-item-content>
-                <v-list-item-title v-text="i+1 + '. ' + step.title" />
+                <v-list-item-title v-text="stepIndex + 1 + '. ' + step.title" />
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -131,9 +147,9 @@ export default {
         playsinline: true
       },
       currentStep: 0,
-      stepIndex: [],
+      stepArray: [],
       stepMode: true,
-      overlayVisible: false
+      overlayVisible: true
     }
   },
   computed: {},
@@ -141,7 +157,7 @@ export default {
     onReady () {
       this.playerReady = true
       const _this = this
-      this.steps.forEach((step, index) => _this.stepIndex.push(step.offset))
+      this.steps.forEach((step, index) => _this.stepArray.push(step.offset))
     },
     goToStep (step, type) {
       if (type === 'relative') {
@@ -154,8 +170,9 @@ export default {
     },
     goTo (seconds) {
       const player = this.$refs.player
+      const _this = this
       player.player.setCurrentTime(seconds).then(function () {
-        return this.play()
+        return _this.play()
         // return player.play()
       })
     },
@@ -169,7 +186,7 @@ export default {
     onTimeupdateHandler (event, data, player) {
       const currentSec = Math.round(event.seconds)
       // console.log(currentSec, this.steps[this.currentStep].offset)
-      if (this.stepIndex.includes(currentSec) && this.steps[this.currentStep].offset < currentSec) {
+      if (this.stepArray.includes(currentSec) && this.steps[this.currentStep].offset < currentSec) {
         this.currentStep++
         if (this.stepMode) {
           this.pause()
@@ -198,5 +215,11 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
+  }
+  .player__step--active {
+    background-color: #43A047;
+  }
+  .player__overlay-txt {
+    color: white;
   }
 </style>
