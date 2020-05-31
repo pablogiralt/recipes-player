@@ -19,7 +19,13 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app color="green darken-1">
+    <v-app-bar
+      v-model="isActive"
+      app
+      hide-on-scroll
+      color="green darken-1"
+      :class="{'header-visible' : headerVisible}"
+    >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>Foodie Player</v-toolbar-title>
     </v-app-bar>
@@ -29,7 +35,7 @@
         <nuxt />
       </v-container>
     </v-content>
-    <v-footer color="green darken-1" app>
+    <v-footer absolute color="green darken-1" app>
       <span class="white--text">&copy; 2019</span>
     </v-footer>
   </v-app>
@@ -43,6 +49,8 @@ export default {
   },
   data: () => ({
     drawer: false,
+    headerVisible: true,
+    isActive: true,
     items: [
       {
         icon: 'mdi-format-list-bulleted-type',
@@ -60,6 +68,17 @@ export default {
         to: '/steak-tartar'
       }
     ]
-  })
+  }),
+  computed: {
+  },
+  created () {
+    this.$nuxt.$on('fullscreenMode', (fullscreenMode) => {
+      if (fullscreenMode) {
+        this.isActive = 0
+      }
+    })
+  },
+  methods: {
+  }
 }
 </script>
