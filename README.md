@@ -1,4 +1,4 @@
-# foodie-player
+# Recipes Player
 
 > A Video player to help you follow recipes
 
